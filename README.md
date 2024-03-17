@@ -32,6 +32,11 @@ Homework for [System Design course](https://balun.courses/courses/system_design)
     - each user reads 100 messages per day
     - each user writes 50 messages per day
     - each user writes 1 comment per day
+* response time
+    - messages: 500 ms
+    - posts: 10s
+
+* geo-distributed: CIS
 
 * data policy
   - posts are saved forever
@@ -45,27 +50,7 @@ Homework for [System Design course](https://balun.courses/courses/system_design)
 Calculations for 1 year
 
 * Picture size 1280 x 720 with 16-bit depth (1.75 Mb)
-* 4 bytes per character
-
-### Messages
-* Incoming RPS
-```
-DAU = 10 000 000
-read rps = 10 000 000 / 86400 * 100 = 11574
-write rps = 10 000 000 / 86400 * 50 = 5787
-```
-* Incoming traffic
-
-```
-message size = 2000 * 4b + 3 * 1.75Mb = 5.25 Mb
-read traffic = 5.25Mb * 5785 rps = 59 Gb/s
-write traffic = 5.25Mb * 11574 rps = 29.6 Gb/s
-```
-
-* Storage Size for one year
-```
-Storage size = 29.6 Gb/s * 86400 * 365 = 911587.5 Tb = 890 Pb
-```
+* 3 bytes per character
 
 ### Posts
 * Incoming RPS
@@ -73,17 +58,29 @@ Storage size = 29.6 Gb/s * 86400 * 365 = 911587.5 Tb = 890 Pb
 DAU = 10 000 000
 read rps = 10 000 000/86400 * 40 = 4629
 write rps for post = 10 000 000/86400 * 1 = 115
-write rps for comment = 10 000 000/86400 * 1 = 115
 ```
 
-* Incoming traffic
+* Incoming traffic for text
 ```
-post size = 2000 * 4b + 6 * 1.75Mb = 10.5Mb
-read traffic = 10.5Mb * 4629 = 47 Gb/s
-write traffic = 1.1 Gb/s
+DAU = 10 000 000
+text size = 3000 * 3 B = 6000b = 6KB
+read traffic = 4629 * 6 KB = 27 MB/s
+write traffic = 115 * 6 KB = 0.7 MB/s
 ```
 
-* Storage size for one year
+* Incoming traffic for images
 ```
-Storage size = 1.1Gb/s * 86400 * 365 = 33 Pb
+post size = 6 * 1.75 MB = 10.5 MB
+read traffic = 10.5 MB * 4629 = 47 GB/s
+write traffic = 1.1 GB/s
+```
+
+* Storage size for images (one year)
+```
+Storage size = 1.1 GB/s * 86400 * 365 = 33 PB
+```
+
+* Storage size for text (one year)
+```
+Storage size = 0.7 MB/s * 86400 * 365 = 21 TB
 ```
